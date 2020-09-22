@@ -142,3 +142,10 @@ function include_template($name, array $data = []) {
 
     return $result;
 }
+function itemcount($projects){
+    return $projects[CNT];
+}
+function filterText($str){
+    $text = htmlspecialchars($str);
+    return $text;
+}

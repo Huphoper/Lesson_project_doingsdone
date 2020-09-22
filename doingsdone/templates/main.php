@@ -1,50 +1,19 @@
-
+<?php
+$projects=createprojectlist($con,$userid);
+$tasks=createtasklist($con,$userid,$project);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+$name=$_POST['name'];
+$proj=$_POST['project'];
+$date=$_POST['date'];
+$file=$_POST['file'];
+//print_r($name);
+//print_r($proj);
+//print_r($date);
+//print_r($file);
+}
+?>
  <section class="content__side">
                 <h2 class="content__side-heading">Проекты</h2>
-
-                <?php
-     require('connection.php');
-
-
-                $sql = 'SELECT `PROJECT_NAME`,`PROJECT_ID`,(SELECT COUNT(*) FROM `task` WHERE `PROJECT_ID`=`project`.`PROJECT_ID`) AS `CNT` FROM `project` WHERE `USER_ID`='.$userid;
-     $result = mysqli_query($con, $sql);
-     $projects = mysqli_fetch_all($result,MYSQLI_ASSOC);
-
-     ?>
-
-                <?php
-                $project = htmlspecialchars($_GET['project']);
-
-      if($project!=null){
-          $sql='SELECT `TASKNAME`,`ENDTIME`,`task`.`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` INNER JOIN `project` WHERE `task`.`USER_ID`='.$userid.' AND `PROJECT_NAME`= "'.$project.'" AND `task`.`PROJECT_ID`=`project`.`PROJECT_ID`';
-         // print($sql);
-      }
-      else{
-     $sql = 'SELECT `TASKNAME`,`ENDTIME`,`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` WHERE `USER_ID`='.$userid;
-      }
-     $result = mysqli_query($con, $sql);
-     $tasks = mysqli_fetch_all($result,MYSQLI_ASSOC);
-
-
-     ?>
-                <?php function itemcount($projects){
-
-
-                    return $projects[CNT];
-                }
-                $show_completed = htmlspecialchars($_GET['show_completed']);
-
-                if($show_completed==null){
-                    $show_complete_tasks = 0;
-                }
-                else{
-                    $show_complete_tasks =$show_completed;
-                }
-function filterText($str){
-    $text = htmlspecialchars($str);
-    return $text;
-}
-                ?>
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
                         <?php $index=0;
@@ -97,7 +66,13 @@ function filterText($str){
                     $textclass="";
                     $cur_date = date_create("now");
                     ?>
-                    <?php  foreach($tasks as $key =>$val): ?>
+                    <?php
+                    if($tasks=="error"){
+                        print("Ошибка 404: Список задач пуст или проект с таким названием не существует");
+                    }
+                    else{
+                    foreach($tasks as $key =>$val):
+                        ?>
 
                     <tr  <?php if($val[TASK_STATUS]==1 && $show_complete_tasks == 0): ?>hidden <?php endif; ?> <?php if($val[TASK_STATUS]==1){ $textclass="tasks__item task task--completed";} else{
                         $textclass="tasks__item task";} ?>
@@ -123,7 +98,7 @@ function filterText($str){
 
                         <td class="task__date"><?=filterText($val[ENDTIME]); ?></td>
                     </tr>
-                    <?php endforeach; ?>
+                    <?php endforeach; }?>
 
                     <!--показывать следующий тег <tr/>, если переменная $show_complete_tasks равна единице-->
                 </table>
