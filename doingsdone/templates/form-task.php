@@ -1,36 +1,12 @@
 <?php
 $projects=createprojectlist($con,$userid);
 ?>
-<section class="content__side">
-    <h2 class="content__side-heading">Проекты</h2>
-    <nav class="main-navigation">
-        <ul class="main-navigation__list">
-            <?php $index=0;
-            $num = count($projects);
-            while($index<$num): ?>
-                <li class="main-navigation__list-item <?php
-                if($projects[$index][PROJECT_NAME]==$project){
-                    print('main-navigation__list-item--active');
-                }
-                ?>" >
 
-                    <a class="main-navigation__list-item-link" href="index.php?project=<?=$projects[$index][PROJECT_NAME]?>"><? print($projects[$index][PROJECT_NAME]); ?></a>
-
-                    <span class="main-navigation__list-item-count"><?= filterText(itemcount($projects[$index])); ?></span>
-                    <?php $index++ ?>
-                </li>
-            <?php endwhile;?>
-        </ul>
-    </nav>
-
-    <a class="button button--transparent button--plus content__side-button"
-       href="pages/form-project.html" target="project_add">Добавить проект</a>
-</section>
 
 <main class="content__main">
     <h2 class="content__main-heading">Добавление задачи</h2>
 
-    <form class="form"  action="../index.php" method="post" autocomplete="off">
+    <form class="form"  action="../add.php" method="post" enctype="multipart/form-data" autocomplete="off">
         <div class="form__row">
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
@@ -45,7 +21,7 @@ $projects=createprojectlist($con,$userid);
                 <?php $index=0;
                 $num = count($projects);
                 while($index<$num): ?>
-                    <option  value=<? print($projects[$index][PROJECT_NAME]); ?> >
+                    <option  value="<? print($projects[$index][PROJECT_NAME]); ?>" >
                         <? print($projects[$index][PROJECT_NAME]); ?></a>
                         <?php $index++ ?>
                     </option>

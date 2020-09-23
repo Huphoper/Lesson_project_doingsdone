@@ -2,8 +2,25 @@
 require('connection.php');
 require('db.php');
 require('helpers.php');
-$project = htmlspecialchars($_GET['project']);
-//require('templates/form-task.php');
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $full_task=$_POST;
+    $file=$_FILES;
+    //var_dump($_FILES);
+    if(strlen($full_task[name])<1){
+        print("Проверка имени не прошла");
+    }
+    else{
+        addtask($con,$full_task,$userid,$file);
+    }
+        $inputed = strtotime($full_task[date]);
+        $today = strtotime("today");
+        if ($today>$inputed ){
+            print_r("Дата должна быть больше или равна текущей!");
+        }
+
+
+}
+
 if ($con == false) {
     print("Ошибка подключения: " . mysqli_connect_error());
 }
@@ -14,3 +31,4 @@ else {
 
     print($layout_content);
 }
+

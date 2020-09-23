@@ -35,5 +35,33 @@ function createtasklist($con,$userid,$project){
     return $tasks;
 
 }
+function addtask($con,$full_task,$userid,$file){
+//print_r($con);
+ //   print_r($full_task);
+ //   print_r($userid);
+    //var_dump($file);
+    $file_url="";
+    print_r("Задача отправлена");
+    if(isset($file['file'])){
+        $file_name = $file['file']['name'];
+        $file_path = __DIR__ . '/uploads/';
+        $file_url = '/uploads/' . $file_name;
+        move_uploaded_file($file['file']['tmp_name'], $file_path . $file_name);
+
+        //print("<a href='$file_url'>$file_name</a>");
+
+    }
+        $taskstatus="'0'";
+
+    $sql = 'SELECT `PROJECT_ID` FROM `project` WHERE `USER_ID`='.$userid.' AND `PROJECT_NAME`="'.$full_task[project].'"';
+    $result = mysqli_query($con, $sql);
+    $projectid=mysqli_fetch_assoc($result);
+    $sql = 'INSERT INTO `task` (`TASK_STATUS`, `TASKNAME`, `FILEREF`, `ENDTIME`, `PROJECT_ID`, `USER_ID`) VALUES ('.$taskstatus.', ?,'.$file_url.' , ?,'.$projectid[PROJECT_ID].','.$userid.')';
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_bind_param($stmt,'sss',$full_task[name],$full_task[file],$full_task[date]);
+    mysqli_stmt_execute($stmt);
+}
 
 

@@ -21,7 +21,7 @@ else {
 
     $page_content = include_template('main.php',['con'=>$con,'show_complete_tasks'=>$show_complete_tasks,'userid'=>$userid,'project'=>$project] );
 // окончательный HTML код
-    $layout_content = include_template('layout.php',['title'=>'Дела в порядке','content'=> $page_content,'con'=>$con,'userid'=>$userid]);
+    $layout_content = include_template('layout.php',['title'=>'Дела в порядке','content'=> $page_content,'con'=>$con,'userid'=>$userid,'project'=>$project]);
 
     print($layout_content);
 }
