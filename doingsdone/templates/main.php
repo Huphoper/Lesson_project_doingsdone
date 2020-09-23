@@ -59,7 +59,7 @@ $tasks=createtasklist($con,$userid,$project);
                         </td>
 
                         <td class="task__file">
-                            <a class="download-link" href="#"><?=filterText($val[FILEREF]); ?></a>
+                            <a class="download-link" href="<?php print(filterText($val[FILEREF])); ?>"><?=filterText($val[FILEREF]); ?></a>
                         </td>
 
                         <td class="task__date"><?=filterText($val[ENDTIME]); ?></td>

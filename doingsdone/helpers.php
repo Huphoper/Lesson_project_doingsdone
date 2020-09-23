@@ -149,3 +149,21 @@ function filterText($str){
     $text = htmlspecialchars($str);
     return $text;
 }
+function validate($full_task,$file){
+    $errors = [];
+    if(strlen($full_task[name])<1 || strlen($full_task[name])>200 ){
+        $errors['name']='101';
+    }
+    if(empty($full_task[project])){
+        $errors['project']='102';
+    }
+    $inputed = strtotime($full_task[date]);
+    $today = strtotime("today");
+    if ($today>$inputed ){
+          $errors['date']="103";
+    }
+    if($file['file']['size']>2097152){
+        $errors['file']="104";
+    }
+    return $errors;
+}

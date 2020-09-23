@@ -2,21 +2,22 @@
 require('connection.php');
 require('db.php');
 require('helpers.php');
+$errors=array();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $full_task=$_POST;
     $file=$_FILES;
     //var_dump($_FILES);
-    if(strlen($full_task[name])<1){
-        print("Проверка имени не прошла");
+    
+    $errors=validate($full_task,$file);
+   // var_dump($errors);
+    if(count($errors)){
+        //$errors_keys =array_keys($errors)
     }
     else{
         addtask($con,$full_task,$userid,$file);
     }
-        $inputed = strtotime($full_task[date]);
-        $today = strtotime("today");
-        if ($today>$inputed ){
-            print_r("Дата должна быть больше или равна текущей!");
-        }
+       
+    
 
 
 }
@@ -25,7 +26,7 @@ if ($con == false) {
     print("Ошибка подключения: " . mysqli_connect_error());
 }
 else {
-    $page_content = include_template('form-task.php',['con'=>$con,'userid'=>$userid,'project'=>$project] );
+    $page_content = include_template('form-task.php',['con'=>$con,'userid'=>$userid,'project'=>$project,'errors'=>$errors] );
 // окончательный HTML код
     $layout_content = include_template('layout.php',['title'=>'Добавить задачу','content'=> $page_content,'con'=>$con,'userid'=>$userid]);
 

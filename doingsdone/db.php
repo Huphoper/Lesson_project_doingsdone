@@ -18,11 +18,11 @@ function createprojectlist($con,$userid){
 }
 function createtasklist($con,$userid,$project){
     if($project!=null){
-        $sql='SELECT `TASKNAME`,`ENDTIME`,`task`.`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` INNER JOIN `project` WHERE `task`.`USER_ID`='.$userid.' AND `PROJECT_NAME`= "'.$project.'" AND `task`.`PROJECT_ID`=`project`.`PROJECT_ID`';
+        $sql='SELECT `TASKNAME`,`ENDTIME`,`task`.`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` INNER JOIN `project` WHERE `task`.`USER_ID`='.$userid.' AND `PROJECT_NAME`= "'.$project.'" AND `task`.`PROJECT_ID`=`project`.`PROJECT_ID` ORDER BY `TASK_ID` DESC';
 
     }
     else{
-        $sql = 'SELECT `TASKNAME`,`ENDTIME`,`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` WHERE `USER_ID`='.$userid;
+        $sql = 'SELECT `TASKNAME`,`ENDTIME`,`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` WHERE `USER_ID`='.$userid.' ORDER BY `TASK_ID` DESC';
     }
     $result = mysqli_query($con, $sql);
     $tasks = mysqli_fetch_all($result,MYSQLI_ASSOC);
@@ -41,7 +41,7 @@ function addtask($con,$full_task,$userid,$file){
  //   print_r($userid);
     //var_dump($file);
     $file_url="";
-    print_r("Задача отправлена");
+    //print_r("Задача отправлена");
     if(isset($file['file'])){
         $file_name = $file['file']['name'];
         $file_path = __DIR__ . '/uploads/';
@@ -56,12 +56,15 @@ function addtask($con,$full_task,$userid,$file){
     $sql = 'SELECT `PROJECT_ID` FROM `project` WHERE `USER_ID`='.$userid.' AND `PROJECT_NAME`="'.$full_task[project].'"';
     $result = mysqli_query($con, $sql);
     $projectid=mysqli_fetch_assoc($result);
-    $sql = 'INSERT INTO `task` (`TASK_STATUS`, `TASKNAME`, `FILEREF`, `ENDTIME`, `PROJECT_ID`, `USER_ID`) VALUES ('.$taskstatus.', ?,'.$file_url.' , ?,'.$projectid[PROJECT_ID].','.$userid.')';
+    $sql = 'INSERT INTO `task` (`TASK_STATUS`, `TASKNAME`, `FILEREF`, `ENDTIME`, `PROJECT_ID`, `USER_ID`) VALUES ('.$taskstatus.', ?,"'.$file_url.'" , ?,'.$projectid[PROJECT_ID].','.$userid.')';
 
     $stmt = mysqli_prepare($con, $sql);
-
-    mysqli_stmt_bind_param($stmt,'sss',$full_task[name],$full_task[file],$full_task[date]);
-    mysqli_stmt_execute($stmt);
+  //  var_dump($sql);
+    mysqli_stmt_bind_param($stmt,'ss',$full_task[name],$full_task[date]);
+    $res=mysqli_stmt_execute($stmt);
+    if ($res) {
+ header("Location: index.php");
+ }
 }
 
 
