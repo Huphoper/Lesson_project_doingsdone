@@ -143,7 +143,7 @@ function include_template($name, array $data = []) {
     return $result;
 }
 function itemcount($projects){
-    return $projects[CNT];
+    return $projects['CNT'];
 }
 function filterText($str){
     $text = htmlspecialchars($str);
@@ -151,13 +151,13 @@ function filterText($str){
 }
 function validate($full_task,$file){
     $errors = [];
-    if(strlen($full_task[name])<1 || strlen($full_task[name])>200 ){
+    if(strlen($full_task['name'])<1 || strlen($full_task['name'])>200 ){
         $errors['name']='101';
     }
-    if(empty($full_task[project])){
+    if(empty($full_task['project'])){
         $errors['project']='102';
     }
-    $inputed = strtotime($full_task[date]);
+    $inputed = strtotime($full_task['date']);
     $today = strtotime("today");
     if ($today>$inputed ){
           $errors['date']="103";

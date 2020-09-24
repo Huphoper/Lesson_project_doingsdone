@@ -25,6 +25,7 @@ INSERT INTO `project` (`PROJECT_ID`, `PROJECT_NAME`, `USER_ID`) VALUES
 
 CREATE TABLE `task` (
   `TASK_ID` smallint(5) UNSIGNED NOT NULL,
+  `CREATION_DATE` DATETIME NOT NULL,
   `TASK_STATUS` enum('0','1') COLLATE utf8mb4_unicode_ci NOT NULL,
   `TASKNAME` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `FILEREF` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -33,15 +34,15 @@ CREATE TABLE `task` (
   `USER_ID` smallint(5) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `task` (`TASK_ID`, `TASK_STATUS`, `TASKNAME`, `FILEREF`, `ENDTIME`, `PROJECT_ID`, `USER_ID`) VALUES
-(1, '0', 'Собеседование в IT компании', 'Home.psd', '2020-06-10', 3, 3),
-(2, '0', 'Выполнить тестовое задание', 'Home.psd', '2019-12-25', 3, 3),
-(3, '1', 'Сделать задание первого раздела', 'Home.psd', '2019-12-21', 2, 3),
-(4, '0', 'Встреча с другом', 'Home.psd', '2019-12-22', 1, 3),
-(5, '0', 'Купить корм для кота', 'Home.psd', NULL, 4, 3),
-(6, '0', 'Заказать пиццу', 'Home.psd', NULL, 4, 3),
-(7, '0', 'Протестировать страницу на другом пользователе', 'Tester.psd', '2020-09-13', 6, 4),
-(8, '0', 'Протестировать страницу на другом пользователе второй раз', 'Tester.psd', '2020-09-13', 6, 4);
+INSERT INTO `task` (`TASK_ID`, `CREATION_DATE`, `TASK_STATUS`, `TASKNAME`, `FILEREF`, `ENDTIME`, `PROJECT_ID`, `USER_ID`) VALUES
+(1, '2019-01-01 19:58:00', '0', 'Собеседование в IT компании', 'Home.psd', '2020-06-10', 3, 3),
+(2, '2019-01-01 19:58:00', '0', 'Выполнить тестовое задание', 'Home.psd', '2019-12-25', 3, 3),
+(3, '2019-01-01 19:58:00', '1', 'Сделать задание первого раздела', 'Home.psd', '2019-12-21', 2, 3),
+(4, '2019-01-01 19:58:00', '0', 'Встреча с другом', 'Home.psd', '2019-12-22', 1, 3),
+(5, '2019-01-01 19:58:00', '0', 'Купить корм для кота', 'Home.psd', NULL, 4, 3),
+(6, '2019-01-01 19:58:00', '0', 'Заказать пиццу', 'Home.psd', NULL, 4, 3),
+(7, '2019-01-01 19:58:00', '0', 'Протестировать страницу на другом пользователе', 'Tester.psd', '2020-09-13', 6, 4),
+(8, '2019-01-01 19:58:00', '0', 'Протестировать страницу на другом пользователе второй раз', 'Tester.psd', '2020-09-13', 6, 4);
 
 CREATE TABLE `user` (
   `USER_ID` smallint(5) UNSIGNED NOT NULL,

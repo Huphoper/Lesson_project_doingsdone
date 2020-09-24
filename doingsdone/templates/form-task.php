@@ -22,8 +22,8 @@ $projects=createprojectlist($con,$userid);
                 <?php $index=0;
                 $num = count($projects);
                 while($index<$num): ?>
-                    <option  value="<? print($projects[$index][PROJECT_NAME]); ?>" >
-                        <? print($projects[$index][PROJECT_NAME]); ?></a>
+                    <option  value="<? print($projects[$index]['PROJECT_NAME']); ?>" >
+                        <? print($projects[$index]['PROJECT_NAME']); ?></a>
                         <?php $index++ ?>
                     </option>
                 <?php endwhile;?>

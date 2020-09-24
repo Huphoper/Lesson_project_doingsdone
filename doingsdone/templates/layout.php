@@ -49,12 +49,12 @@ $projects=createprojectlist($con,$userid);
                         $num = count($projects);
                         while($index<$num): ?>
                             <li class="main-navigation__list-item <?php
-                            if($projects[$index][PROJECT_NAME]==$project){
+                            if($projects[$index]['PROJECT_NAME']==$project){
                                 print('main-navigation__list-item--active');
                             }
                             ?>" >
 
-                                <a class="main-navigation__list-item-link" href="index.php?project=<?=$projects[$index][PROJECT_NAME]?>"><? print($projects[$index][PROJECT_NAME]); ?></a>
+                                <a class="main-navigation__list-item-link" href="index.php?project=<?=$projects[$index]['PROJECT_NAME']?>"><? print($projects[$index]['PROJECT_NAME']); ?></a>
 
                                 <span class="main-navigation__list-item-count"><?= filterText(itemcount($projects[$index])); ?></span>
                                 <?php $index++ ?>

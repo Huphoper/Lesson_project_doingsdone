@@ -3,10 +3,15 @@
 require_once('connection.php');
 require_once('helpers.php');
 require_once('db.php');
+$project=null;
+$show_completed=null;
+if(isset($_GET['project'])){
+   $project = htmlspecialchars($_GET['project']); 
+}
+if(isset($_GET['show_completed'])){
+    $show_completed = htmlspecialchars($_GET['show_completed']);
+}
 
-
-$project = htmlspecialchars($_GET['project']);
-$show_completed = htmlspecialchars($_GET['show_completed']);
 
 if($show_completed==null){
     $show_complete_tasks = 0;

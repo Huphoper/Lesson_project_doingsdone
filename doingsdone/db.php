@@ -5,9 +5,9 @@ function get_first_name($con,$userid){
     $sql = 'SELECT `FIRST_NAME` FROM `user` WHERE `USER_ID`='.$userid;
     $result = mysqli_query($con, $sql);
     $firstname=mysqli_fetch_assoc($result);
-
+    $first =$firstname['FIRST_NAME'];
     //print_r($firstname[FIRST_NAME]);
-    return $firstname[FIRST_NAME];
+    return $first;
 }
 function createprojectlist($con,$userid){
     $sql = 'SELECT `PROJECT_NAME`,`project`.`PROJECT_ID`, COUNT(`task`.`TASK_ID`) AS `CNT` FROM `project` LEFT JOIN `task` ON `task`.`PROJECT_ID`=`project`.`PROJECT_ID` WHERE `project`.`USER_ID`='.$userid.' GROUP BY `PROJECT_ID`';
@@ -53,14 +53,14 @@ function addtask($con,$full_task,$userid,$file){
     }
         $taskstatus="'0'";
 
-    $sql = 'SELECT `PROJECT_ID` FROM `project` WHERE `USER_ID`='.$userid.' AND `PROJECT_NAME`="'.$full_task[project].'"';
+    $sql = 'SELECT `PROJECT_ID` FROM `project` WHERE `USER_ID`='.$userid.' AND `PROJECT_NAME`="'.$full_task['project'].'"';
     $result = mysqli_query($con, $sql);
     $projectid=mysqli_fetch_assoc($result);
-    $sql = 'INSERT INTO `task` (`TASK_STATUS`, `TASKNAME`, `FILEREF`, `ENDTIME`, `PROJECT_ID`, `USER_ID`) VALUES ('.$taskstatus.', ?,"'.$file_url.'" , ?,'.$projectid[PROJECT_ID].','.$userid.')';
+    $sql = 'INSERT INTO `task` (`CREATION_DATE`,`TASK_STATUS`, `TASKNAME`, `FILEREF`, `ENDTIME`, `PROJECT_ID`, `USER_ID`) VALUES ( NOW() ,'.$taskstatus.', ?,"'.$file_url.'" , ?,'.$projectid['PROJECT_ID'].','.$userid.')';
 
     $stmt = mysqli_prepare($con, $sql);
   //  var_dump($sql);
-    mysqli_stmt_bind_param($stmt,'ss',$full_task[name],$full_task[date]);
+    mysqli_stmt_bind_param($stmt,'ss',$full_task['name'],$full_task['date']);
     $res=mysqli_stmt_execute($stmt);
     if ($res) {
  header("Location: index.php");
