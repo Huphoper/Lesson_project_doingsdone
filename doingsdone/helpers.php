@@ -162,8 +162,12 @@ function validate($full_task,$file){
     if ($today>$inputed ){
           $errors['date']="103";
     }
-    if($file['file']['size']>2097152){
+    if($file['file']['size']>10485760){
         $errors['file']="104";
     }
     return $errors;
+      }
+function returnfilename($str){
+$endref=explode('/',$str);
+return end($endref);
 }

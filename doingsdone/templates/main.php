@@ -1,9 +1,3 @@
-<?php
-$projects=createprojectlist($con,$userid);
-$tasks=createtasklist($con,$userid,$project);
-?>
-
-
             <main class="content__main">
                 <h2 class="content__main-heading">Список задач</h2>
 
@@ -40,7 +34,8 @@ $tasks=createtasklist($con,$userid,$project);
                     foreach($tasks as $key =>$val):
                         ?>
 
-                    <tr  <?php if($val['TASK_STATUS']==1 && $show_complete_tasks == 0): ?>hidden <?php endif; ?> <?php if($val['TASK_STATUS']==1){ $textclass="tasks__item task task--completed";} else{
+                    <tr  <?php if($val['TASK_STATUS']==1 && $show_complete_tasks == 0): ?>hidden <?php endif; ?> <?php if($val['TASK_STATUS']==1){
+                        $textclass="tasks__item task task--completed";} else{
                         $textclass="tasks__item task";} ?>
                       <?php
                               if($val['ENDTIME']!='null'){$input_date = new DateTime($val['ENDTIME']);
@@ -53,13 +48,14 @@ $tasks=createtasklist($con,$userid,$project);
                      class=<?php echo '"'.$textclass.'"'; ?>  >
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
-                                <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1" <?php if($val['TASK_STATUS']==1): ?>checked <?php endif; ?>>
+                                <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1" <?php
+                                if($val['TASK_STATUS']==1): ?>checked <?php endif; ?>>
                                 <span class="checkbox__text"><?=filterText($val['TASKNAME']); ?> </span>
                             </label>
                         </td>
 
                         <td class="task__file">
-                            <a class="download-link" href="<?php print(filterText($val['FILEREF'])); ?>"><?=filterText($val['FILEREF']); ?></a>
+                            <a class="download-link" href="<?php print(filterText($val['FILEREF'])); ?>"><?= returnfilename(filterText($val['FILEREF'])); ?></a>
                         </td>
 
                         <td class="task__date"><?=filterText($val['ENDTIME']); ?></td>

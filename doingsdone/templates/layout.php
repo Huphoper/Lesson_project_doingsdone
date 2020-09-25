@@ -1,6 +1,3 @@
-<?php
-$projects=createprojectlist($con,$userid);
-?>
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -23,8 +20,8 @@ $projects=createprojectlist($con,$userid);
             </a>
 
             <div class="main-header__side">
-                <a class="main-header__side-item button button--plus open-modal" href="../add.php">Добавить задачу</a>
-
+                <a class="main-header__side-item button button--plus open-modal" href="../add.php<?php
+                if($project!=null){print('?project='.$project);} ?>">Добавить задачу</a>
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__data">
                         <p>
@@ -54,7 +51,8 @@ $projects=createprojectlist($con,$userid);
                             }
                             ?>" >
 
-                                <a class="main-navigation__list-item-link" href="index.php?project=<?=$projects[$index]['PROJECT_NAME']?>"><? print($projects[$index]['PROJECT_NAME']); ?></a>
+                                <a class="main-navigation__list-item-link" href="index.php?project=<?=$projects[$index]['PROJECT_NAME']?>">
+                                    <? print($projects[$index]['PROJECT_NAME']); ?></a>
 
                                 <span class="main-navigation__list-item-count"><?= filterText(itemcount($projects[$index])); ?></span>
                                 <?php $index++ ?>
@@ -79,7 +77,7 @@ $projects=createprojectlist($con,$userid);
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
-        <a class="main-footer__button button button--plus" href="../add.php">Добавить задачу</a>
+        <a class="main-footer__button button button--plus" href="../add.php<?php if($project!=null){print('?project='.$project);} ?>">Добавить задачу</a>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
