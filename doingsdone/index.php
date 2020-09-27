@@ -1,5 +1,6 @@
 <?php
 // показывать или нет выполненные задачи
+if (isset($_GET['registered'])) {
 require_once('connection.php');
 require_once('helpers.php');
 require_once('db.php');
@@ -32,5 +33,8 @@ else {
 
     print($layout_content);
 }
-
+}
+else{
+    require_once('registration.php');
+}
 

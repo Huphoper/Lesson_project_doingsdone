@@ -87,5 +87,49 @@ VALUES ( 0, ?,? ,?,?,?)';
  header("Location: index.php?project=".$full_task['project']);
  }
 }
-
+function login_validate($con,$reg_date){
+    $errors = [];
+    if(filter_var($reg_date['email'],FILTER_VALIDATE_EMAIL)){
+        $sql = 'SELECT COUNT(`EMAIL`) FROM `user` WHERE `EMAIL`= ?';
+            
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt,'s',$reg_date['email']);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $exists=mysqli_fetch_assoc($result);
+        
+        if($exists['COUNT(`EMAIL`)']==1){
+           
+           $errors['email']='202'; 
+        }
+    }
+    else{
+        
+        $errors['email']='201';
+    }
+    if(strlen($reg_date['name'])<1 || strlen($reg_date['name'])>30 ){
+        
+        $errors['name']='203';
+    }
+    if(strlen($reg_date['password'])<5){
+        
+        $errors['password']='204';
+    }
+    
+    return $errors;
+      }
+function add_user($con,$reg_date){
+    $passwordHash = password_hash($full_task['password'], PASSWORD_DEFAULT);
+    $sql = 'INSERT INTO `user` (`EMAIL`, `PASSWORD`, `FIRST_NAME`) VALUES ( ?,?,?)';
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt,'sss',$reg_date['email'],$passwordHash,$reg_date['name']);
+    $res=mysqli_stmt_execute($stmt);
+  //   print('Запись добавлена!');
+   // var_dump($res);
+    if ($res) {
+session_start();
+ $_SESSION['usid'] = 3; 
+ header("Location: index.php?registered=1");
+ }
+}
 

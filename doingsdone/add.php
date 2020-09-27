@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $file=$_FILES;
 
 
-    $errors=validate($full_task,$file);
+    $errors=task_validate($full_task,$file);
 
     if(count($errors)){
 

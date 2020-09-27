@@ -149,7 +149,7 @@ function filterText($str){
     $text = htmlspecialchars($str);
     return $text;
 }
-function validate($full_task,$file){
+function task_validate($full_task,$file){
     $errors = [];
     if(strlen($full_task['name'])<1 || strlen($full_task['name'])>200 ){
         $errors['name']='101';
@@ -167,6 +167,7 @@ function validate($full_task,$file){
     }
     return $errors;
       }
+
 function returnfilename($str){
 $endref=explode('/',$str);
 return end($endref);
