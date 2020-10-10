@@ -24,8 +24,14 @@ function createprojectlist($con,$userid){
     $projects = mysqli_fetch_all($result,MYSQLI_ASSOC);
     return $projects;
 }
-function createtasklist($con,$userid,$project){
-    if($project!=null){
+function createtasklist($con,$userid,$project,$task_search){
+    if($task_search!=null){
+        $sql = 'SELECT `TASKNAME`,`ENDTIME`,`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` WHERE `USER_ID`=? AND MATCH(`TASKNAME`) AGAINST(?) ORDER BY `TASK_ID` DESC';
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt,'is',$userid,$task_search);
+    }
+    else{
+        if($project!=null){
         $sql='SELECT `TASKNAME`,`ENDTIME`,`task`.`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` INNER JOIN `project` WHERE `task`.`USER_ID`=? AND `PROJECT_NAME`= ? AND `task`.`PROJECT_ID`=`project`.`PROJECT_ID` ORDER BY `TASK_ID` DESC';
         $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt,'is',$userid,$project);
@@ -34,6 +40,7 @@ function createtasklist($con,$userid,$project){
         $sql = 'SELECT `TASKNAME`,`ENDTIME`,`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` WHERE `USER_ID`=? ORDER BY `TASK_ID` DESC';
         $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt,'i',$userid);
+    }
     }
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
