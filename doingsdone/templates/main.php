@@ -8,12 +8,12 @@
 
                 <div class="tasks-controls">
                     <nav class="tasks-switch">
-                        <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-                        <a href="/" class="tasks-switch__item">Повестка дня</a>
-                        <a href="/" class="tasks-switch__item">Завтра</a>
-                        <a href="/" class="tasks-switch__item">Просроченные</a>
+                        
+                        <a href="/?filter=all" class="tasks-switch__item <?php if($filter==all):?>tasks-switch__item--active <?php endif;?>">Все задачи</a>
+                        <a href="/?filter=today" class="tasks-switch__item <?php if($filter==today):?>tasks-switch__item--active <?php endif;?>">Повестка дня</a>
+                        <a href="/?filter=tomorrow" class="tasks-switch__item <?php if($filter==tomorrow):?>tasks-switch__item--active <?php endif;?>">Завтра</a>
+                        <a href="/?filter=expired" class="tasks-switch__item <?php if($filter==expired):?>tasks-switch__item--active <?php endif;?>">Просроченные</a>
                     </nav>
-
                     <label class="checkbox">
                         <!--добавить сюда атрибут "checked", если переменная $show_complete_tasks равна единице-->
                         <input class="checkbox__input visually-hidden show_completed" type="checkbox" <?php if($show_complete_tasks == 1): ?>checked <?php endif; ?> >
@@ -40,16 +40,15 @@
                               if($val['ENDTIME']!='null'){$input_date = new DateTime($val['ENDTIME']);
                               $inputed = strtotime($val['ENDTIME']);
                               $today = strtotime("now");
-                              if ($today-$inputed<=86400 ){
-                                $textclass="tasks__item task task--important";
-                              } }
+                              if ($today-$inputed>=86400 ){
+                                $textclass="tasks__item task task--important";}}
                      ?>
                      class=<?php echo '"'.$textclass.'"'; ?>  >
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1" <?php
                                 if($val['TASK_STATUS']==1): ?>checked <?php endif; ?>>
-                                <span class="checkbox__text"><?=filterText($val['TASKNAME']); ?> </span>
+                                <a href="index.php?taskname=<?=filterText($val['TASKNAME']); ?>"><span class="checkbox__text"><?=filterText($val['TASKNAME']); ?> </span></a>
                             </label>
                         </td>
 

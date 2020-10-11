@@ -2,14 +2,9 @@
 function get_first_name($con,$userid){
     $sql = 'SELECT `FIRST_NAME` FROM `user` WHERE `USER_ID`= ?';
     $stmt = mysqli_prepare($con, $sql);
-
     mysqli_stmt_bind_param($stmt,'i',$userid);
-
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
-
-
-
     $firstname=mysqli_fetch_assoc($res);
     $first =$firstname['FIRST_NAME'];
 
@@ -24,7 +19,9 @@ function createprojectlist($con,$userid){
     $projects = mysqli_fetch_all($result,MYSQLI_ASSOC);
     return $projects;
 }
-function createtasklist($con,$userid,$project,$task_search){
+function createtasklist($con,$userid,$project,$task_search,$filter){
+    if($filter==all){
+        
     if($task_search!=null){
         $sql = 'SELECT `TASKNAME`,`ENDTIME`,`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` WHERE `USER_ID`=? AND MATCH(`TASKNAME`) AGAINST(?) ORDER BY `TASK_ID` DESC';
         $stmt = mysqli_prepare($con, $sql);
@@ -41,6 +38,21 @@ function createtasklist($con,$userid,$project,$task_search){
         $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt,'i',$userid);
     }
+    }}
+    else if($filter==today){
+         $sql = 'SELECT `TASKNAME`,`ENDTIME`,`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` WHERE `USER_ID`=?  AND `ENDTIME`= CURRENT_DATE() ORDER BY `TASK_ID` DESC';
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt,'i',$userid);
+    }
+    else if($filter==tomorrow){
+         $sql = 'SELECT `TASKNAME`,`ENDTIME`,`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` WHERE `USER_ID`=? AND `ENDTIME`= CURRENT_DATE() + INTERVAL 1 DAY ORDER BY `TASK_ID` DESC';
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt,'i',$userid);
+    }
+    else if($filter==expired){
+         $sql = 'SELECT `TASKNAME`,`ENDTIME`,`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` WHERE `USER_ID`=? AND `ENDTIME`< CURRENT_DATE() ORDER BY `TASK_ID` DESC';
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt,'i',$userid);
     }
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
@@ -63,9 +75,6 @@ function addtask($con,$full_task,$userid,$file){
         $file_path = __DIR__ . '/uploads/';
         $file_url = '/uploads/' . $file_name;
         move_uploaded_file($file['file']['tmp_name'], $file_path . $file_name);
-
-
-
     }
     $taskstatus="'0'";
     $projectid=null;
@@ -139,4 +148,36 @@ session_start();
  header("Location: index.php?registered=1");
  }
 }
-
+function addproject($con,$taskname,$userid){   
+    $sql = 'INSERT INTO `project` (`PROJECT_NAME`,`USER_ID`) VALUES (?,?)';
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt,'si',$taskname['name'],$userid);
+    $res=mysqli_stmt_execute($stmt);
+    if ($res) {
+ header("Location: index.php?project=".$taskname['name']);
+ }
+    else{
+       $errors['name']='102'; 
+        return $errors;
+    }
+}
+function statuschange($con,$taskname,$userid){
+    $sql='SELECT `TASK_STATUS` FROM `task` WHERE `USER_ID`=? AND `TASKNAME`=?';
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt,'is',$userid,$taskname);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    $taskstatus=mysqli_fetch_assoc($res);
+    $status =$taskstatus['TASK_STATUS'];
+    if($status==1){
+       $sql = "UPDATE `task` SET `TASK_STATUS` = '0' WHERE `TASKNAME` = ? AND `USER_ID`=?"; 
+    }
+    else{
+       $sql = "UPDATE `task` SET `TASK_STATUS` = '1' WHERE `TASKNAME` = ? AND `USER_ID`=?"; 
+    } 
+    
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt,'si',$taskname,$userid);
+    $res=mysqli_stmt_execute($stmt);
+    header("Location: index.php");
+}

@@ -172,3 +172,10 @@ function returnfilename($str){
 $endref=explode('/',$str);
 return end($endref);
 }
+function project_validate($taskname){
+    $errors = [];
+    if(strlen($taskname['name'])<1 || strlen($taskname['name'])>=25 ){
+        $errors['name']='101';
+    }    
+    return $errors;
+}

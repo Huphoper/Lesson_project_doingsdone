@@ -11,16 +11,16 @@ USE `dukephp`;
 
 CREATE TABLE `project` (
   `PROJECT_ID` smallint(5) UNSIGNED NOT NULL,
-  `PROJECT_NAME` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `USER_ID` smallint(5) UNSIGNED DEFAULT NULL
+  `PROJECT_NAME` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `USER_ID` smallint(5) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `project` (`PROJECT_ID`, `PROJECT_NAME`, `USER_ID`) VALUES
-(1, 'Входящие', 3),
-(2, 'Учеба', 3),
-(3, 'Работа', 3),
-(4, 'Домашние дела', 3),
 (5, 'Авто', 3),
+(1, 'Входящие', 3),
+(4, 'Домашние дела', 3),
+(3, 'Работа', 3),
+(2, 'Учеба', 3),
 (6, 'Тестирование БД', 4);
 
 CREATE TABLE `task` (
@@ -37,10 +37,10 @@ CREATE TABLE `task` (
 INSERT INTO `task` (`TASK_ID`, `CREATION_DATE`, `TASK_STATUS`, `TASKNAME`, `FILEREF`, `ENDTIME`, `PROJECT_ID`, `USER_ID`) VALUES
 (1, '2019-01-01 19:58:00', 0, 'Собеседование в IT компании', 'Home.psd', '2020-06-10', 3, 3),
 (2, '2019-01-01 19:58:00', 0, 'Выполнить тестовое задание', 'Home.psd', '2019-12-25', 3, 3),
-(3, '2019-01-01 19:58:00', 1, 'Сделать задание первого раздела', 'Home.psd', '2019-12-21', 2, 3),
+(3, '2019-01-01 19:58:00', 0, 'Сделать задание первого раздела', 'Home.psd', '2019-12-21', 2, 3),
 (4, '2019-01-01 19:58:00', 0, 'Встреча с другом', 'Home.psd', '2019-12-22', 1, 3),
-(5, '2019-01-01 19:58:00', 0, 'Купить корм для кота', 'Home.psd', NULL, 4, 3),
-(6, '2019-01-01 19:58:00', 0, 'Заказать пиццу', 'Home.psd', NULL, 4, 3),
+(5, '2019-01-01 19:58:00', 1, 'Купить корм для кота', 'Home.psd', '2020-10-12', 4, 3),
+(6, '2019-01-01 19:58:00', 0, 'Заказать пиццу', 'Home.psd', '2020-10-11', 4, 3),
 (7, '2019-01-01 19:58:00', 0, 'Протестировать страницу на другом пользователе', 'Tester.psd', '2020-09-13', 6, 4),
 (8, '2019-01-01 19:58:00', 0, 'Протестировать страницу на другом пользователе второй раз', 'Tester.psd', '2020-09-13', 6, 4);
 
@@ -59,6 +59,7 @@ INSERT INTO `user` (`USER_ID`, `REG_DATE`, `EMAIL`, `PASSWORD`, `FIRST_NAME`) VA
 
 ALTER TABLE `project`
   ADD PRIMARY KEY (`PROJECT_ID`),
+  ADD UNIQUE KEY `UNIQUE_PROJECT_NAME` (`USER_ID`,`PROJECT_NAME`),
   ADD KEY `FK_USER_ID` (`USER_ID`),
   ADD KEY `PROJECT_NAME` (`PROJECT_NAME`);
 
@@ -81,7 +82,7 @@ ALTER TABLE `task`
   MODIFY `TASK_ID` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 ALTER TABLE `user`
-  MODIFY `USER_ID` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `USER_ID` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 
 ALTER TABLE `project`

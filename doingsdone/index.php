@@ -7,6 +7,7 @@ require_once('db.php');
 $project=null;
 $show_completed=null;
 $task_search=null;
+$filter=all;    
 if(isset($_GET['project'])){
    $project = htmlspecialchars($_GET['project']);
 }
@@ -22,19 +23,23 @@ if($show_completed==null){
 else{
     $show_complete_tasks =$show_completed;
 }
+if(isset($_GET['filter'])){
+    $filter = htmlspecialchars($_GET['filter']);
+}
+if(isset($_GET['taskname'])){
+    $taskname=$_GET['taskname'];
+    statuschange($con,$taskname,$userid);
+}
 $projects=createprojectlist($con,$userid);
-$tasks=createtasklist($con,$userid,$project,$task_search);
+$tasks=createtasklist($con,$userid,$project,$task_search,$filter);
 if ($con == false) {
     print("Ошибка подключения: " . mysqli_connect_error());
 }
 else {
-
-    $page_content = include_template('main.php',[
-        'con'=>$con,'show_complete_tasks'=>$show_complete_tasks,'userid'=>$userid,'project'=>$project,'projects'=>$projects,'tasks'=>$tasks] );
+    $page_content = include_template('main.php',[        'con'=>$con,'show_complete_tasks'=>$show_complete_tasks,'userid'=>$userid,'project'=>$project,'projects'=>$projects,'tasks'=>$tasks,'filter'=>$filter] );
 // окончательный HTML код
     $layout_content = include_template('layout.php',[
         'title'=>'Дела в порядке','content'=> $page_content,'con'=>$con,'userid'=>$userid,'project'=>$project,'projects'=>$projects]);
-
     print($layout_content);
 }
 }
