@@ -1,4 +1,7 @@
 <?php
+session_start();
+if (isset($_SESSION['usid'])) {
+$userid = $_SESSION['usid'];
 require_once('connection.php');
 require_once('db.php');
 require_once('helpers.php');
@@ -28,3 +31,7 @@ else {
     print($layout_content);
 }
 
+}
+else{
+    require_once('guest.php');
+}

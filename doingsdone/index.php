@@ -1,9 +1,17 @@
 <?php
+
+session_start();
+if(isset($_GET['session'])){
+   session_destroy();
+    header("Location: index.php");
+}
 // показывать или нет выполненные задачи
-if (/*isset($_GET['registered'])*/1==1) {
+if (isset($_SESSION['usid'])) {
+$userid = $_SESSION['usid'];
 require_once('connection.php');
 require_once('helpers.php');
 require_once('db.php');
+
 $project=null;
 $show_completed=null;
 $task_search=null;
@@ -44,6 +52,6 @@ else {
 }
 }
 else{
-    require_once('registration.php');
+    require_once('guest.php');
 }
 

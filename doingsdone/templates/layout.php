@@ -31,7 +31,7 @@
                             ?>
                         </p>
 
-                        <a href="#">Выйти</a>
+                        <a href="index.php?session=cls">Выйти</a>
                     </div>
                 </div>
             </div>

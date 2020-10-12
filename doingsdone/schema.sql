@@ -48,13 +48,13 @@ CREATE TABLE `user` (
   `USER_ID` smallint(5) UNSIGNED NOT NULL,
   `REG_DATE` datetime NOT NULL DEFAULT current_timestamp(),
   `EMAIL` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `PASSWORD` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `PASSWORD` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `FIRST_NAME` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `user` (`USER_ID`, `REG_DATE`, `EMAIL`, `PASSWORD`, `FIRST_NAME`) VALUES
-(3, '2020-09-13 12:54:34', 'Konstantin1995@mail.com', 'KostyaTester1995', 'Константин'),
-(4, '2020-09-13 17:30:55', 'NewTesterPetya@mail.com', 'PetyaTester2020', 'Петр');
+(3, '2020-09-13 12:54:34', 'Konstantin1995@mail.com', '$2y$10$h0d9TqqFOTSPpnmEn1X08uJ2hXwz2f5qK0Ok1ZWHZG/.7cTKOG9Ju', 'Константин'),
+(4, '2020-09-13 17:30:55', 'NewTesterPetya@mail.com', '$2y$10$h0d9TqqFOTSPpnmEn1X08uJ2hXwz2f5qK0Ok1ZWHZG/.7cTKOG9Ju', 'Петр');
 
 
 ALTER TABLE `project`

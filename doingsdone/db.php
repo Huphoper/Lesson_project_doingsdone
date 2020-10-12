@@ -135,7 +135,7 @@ function login_validate($con,$reg_date){
     return $errors;
       }
 function add_user($con,$reg_date){
-    $passwordHash = password_hash($full_task['password'], PASSWORD_DEFAULT);
+    $passwordHash = password_hash($reg_date['password'], PASSWORD_DEFAULT);
     $sql = 'INSERT INTO `user` (`EMAIL`, `PASSWORD`, `FIRST_NAME`) VALUES ( ?,?,?)';
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt,'sss',$reg_date['email'],$passwordHash,$reg_date['name']);
@@ -143,9 +143,8 @@ function add_user($con,$reg_date){
   //   print('Запись добавлена!');
    // var_dump($res);
     if ($res) {
-session_start();
- $_SESSION['usid'] = 3; 
- header("Location: index.php?registered=1");
+                   
+ header("Location: login.php");
  }
 }
 function addproject($con,$taskname,$userid){   
@@ -180,4 +179,30 @@ function statuschange($con,$taskname,$userid){
     mysqli_stmt_bind_param($stmt,'si',$taskname,$userid);
     $res=mysqli_stmt_execute($stmt);
     header("Location: index.php");
+}
+function logintry($con,$user_data){
+     $sql = 'SELECT `PASSWORD` FROM `user` WHERE `EMAIL`= ?';
+     $stmt = mysqli_prepare($con, $sql);
+     mysqli_stmt_bind_param($stmt,'s',$user_data['email']);
+     mysqli_stmt_execute($stmt);
+     $result = mysqli_stmt_get_result($stmt);
+     $hashpass=mysqli_fetch_assoc($result);     
+     if(password_verify($user_data['password'],$hashpass['PASSWORD'])){
+     $sql = 'SELECT `USER_ID` FROM `user` WHERE `EMAIL`= ?';
+     $stmt = mysqli_prepare($con, $sql);
+     mysqli_stmt_bind_param($stmt,'s',$user_data['email']);
+     mysqli_stmt_execute($stmt);
+     $result = mysqli_stmt_get_result($stmt);
+     $usid=mysqli_fetch_assoc($result);
+     
+     $_SESSION['usid'] = $usid['USER_ID'];     
+     header("Location: index.php");
+     }
+    else{
+        $errors['password']='302';
+    }
+    return $errors;
+}
+function sessionclose(){
+    session_destroy();
 }

@@ -1,7 +1,11 @@
 <?php
+session_start();
+if (isset($_SESSION['usid'])) {
+$userid = $_SESSION['usid'];
 require_once('connection.php');
 require_once('db.php');
 require_once('helpers.php');
+
 $errors=array();
 $project=null;
 $projects=createprojectlist($con,$userid);
@@ -34,5 +38,9 @@ else {
         'title'=>'Добавить задачу','content'=> $page_content,'con'=>$con,'userid'=>$userid,'project'=>$project,'projects'=>$projects]);
 
     print($layout_content);
+}
+}
+else{
+    require_once('guest.php');
 }
 
