@@ -19,7 +19,7 @@
         </a>
 
         <div class="main-header__side">
-          <a class="main-header__side-item button button--transparent" href="form-authorization.html">Войти</a>
+          <a class="main-header__side-item button button--transparent" href="login.php">Войти</a>
         </div>
       </header>
 
@@ -27,7 +27,7 @@
         <section class="content__side">
           <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
 
-          <a class="button button--transparent content__side-button" href="form-authorization.html">Войти</a>
+          <a class="button button--transparent content__side-button" href="login.php">Войти</a>
         </section>
 
         <main class="content__main">
@@ -37,8 +37,8 @@
             <div class="form__row">
               <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
-              <input class="form__input <?= in_array('201',$errors)? "form__input--error":"" ?> <?= in_array('202',$errors)? "form__input--error":"" ?>" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
-                
+              <input class="form__input <?= in_array('201',$errors)? "form__input--error":"" ?> <?= in_array('202',$errors)? "form__input--error":"" ?>" type="text" name="email" id="email" value="<?php if(isset($_POST['email'])){print($_POST['email']); } ?>" placeholder="Введите e-mail">
+
               <?= in_array('201',$errors)? "<p class='form__message'>E-mail введён некорректно</p>":"" ?>
                 <?= in_array('202',$errors)? "<p class='form__message'>Данный e-mail уже используется</p>":"" ?>
             </div>
@@ -46,14 +46,14 @@
             <div class="form__row">
               <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
-              <input class="form__input <?= in_array('204',$errors)? "form__input--error":"" ?>" type="password" name="password" id="password" value="" placeholder="Введите пароль">
+              <input class="form__input <?= in_array('204',$errors)? "form__input--error":"" ?>" type="password" name="password" id="password" value="<?php if(isset($_POST['password'])){print($_POST['password']); } ?>" placeholder="Введите пароль">
                 <?= in_array('204',$errors)? "<p class='form__message'>Пароль должен состоять как минимум из пяти символов</p>":"" ?>
             </div>
 
             <div class="form__row">
               <label class="form__label" for="name">Имя <sup>*</sup></label>
 
-              <input class="form__input <?= in_array('203',$errors)? "form__input--error":"" ?>" type="text" name="name" id="name" value="" placeholder="Введите имя">
+              <input class="form__input <?= in_array('203',$errors)? "form__input--error":"" ?>" type="text" name="name" id="name" value="<?php if(isset($_POST['name'])){print($_POST['name']); } ?>" placeholder="Введите имя">
                 <?= in_array('203',$errors)? "<p class='form__message'>Поле имя не должно быть пустым или содержать более 30 символов</p>":"" ?>
             </div>
 

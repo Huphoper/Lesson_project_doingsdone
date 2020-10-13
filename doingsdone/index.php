@@ -15,7 +15,7 @@ require_once('db.php');
 $project=null;
 $show_completed=null;
 $task_search=null;
-$filter=all;    
+$filter=all;
 if(isset($_GET['project'])){
    $project = htmlspecialchars($_GET['project']);
 }
@@ -34,9 +34,10 @@ else{
 if(isset($_GET['filter'])){
     $filter = htmlspecialchars($_GET['filter']);
 }
-if(isset($_GET['taskname'])){
-    $taskname=$_GET['taskname'];
-    statuschange($con,$taskname,$userid);
+if(isset($_GET['task_id'])&&isset($_GET['check'])){
+    $taskname=$_GET['task_id'];
+    $check=$_GET['check'];
+    statuschange($con,$taskname,$check,$userid);
 }
 $projects=createprojectlist($con,$userid);
 $tasks=createtasklist($con,$userid,$project,$task_search,$filter);
@@ -44,7 +45,7 @@ if ($con == false) {
     print("Ошибка подключения: " . mysqli_connect_error());
 }
 else {
-    $page_content = include_template('main.php',[        'con'=>$con,'show_complete_tasks'=>$show_complete_tasks,'userid'=>$userid,'project'=>$project,'projects'=>$projects,'tasks'=>$tasks,'filter'=>$filter] );
+    $page_content = include_template('main.php',['con'=>$con,'show_complete_tasks'=>$show_complete_tasks,'userid'=>$userid,'project'=>$project,'projects'=>$projects,'tasks'=>$tasks,'filter'=>$filter] );
 // окончательный HTML код
     $layout_content = include_template('layout.php',[
         'title'=>'Дела в порядке','content'=> $page_content,'con'=>$con,'userid'=>$userid,'project'=>$project,'projects'=>$projects]);

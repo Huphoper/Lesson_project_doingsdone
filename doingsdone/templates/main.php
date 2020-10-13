@@ -8,7 +8,7 @@
 
                 <div class="tasks-controls">
                     <nav class="tasks-switch">
-                        
+
                         <a href="/?filter=all" class="tasks-switch__item <?php if($filter==all):?>tasks-switch__item--active <?php endif;?>">Все задачи</a>
                         <a href="/?filter=today" class="tasks-switch__item <?php if($filter==today):?>tasks-switch__item--active <?php endif;?>">Повестка дня</a>
                         <a href="/?filter=tomorrow" class="tasks-switch__item <?php if($filter==tomorrow):?>tasks-switch__item--active <?php endif;?>">Завтра</a>
@@ -27,7 +27,7 @@
                     ?>
                     <?php
                     if($tasks=="error"){
-                        print("Ошибка 404: Список задач пуст или проект с таким названием не существует");
+//                        print("Ошибка 404: Список задач пуст или проект с таким названием не существует");
                     }
                     else{
                     foreach($tasks as $key =>$val):
@@ -39,16 +39,18 @@
                       <?php
                               if($val['ENDTIME']!='null'){$input_date = new DateTime($val['ENDTIME']);
                               $inputed = strtotime($val['ENDTIME']);
-                              $today = strtotime("now");
+                              $today = strtotime("today");
                               if ($today-$inputed>=86400 ){
                                 $textclass="tasks__item task task--important";}}
                      ?>
                      class=<?php echo '"'.$textclass.'"'; ?>  >
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
-                                <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1" <?php
+                                <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?=filterText($val['TASKNAME']); ?>" <?php
                                 if($val['TASK_STATUS']==1): ?>checked <?php endif; ?>>
-                                <a href="index.php?taskname=<?=filterText($val['TASKNAME']); ?>"><span class="checkbox__text"><?=filterText($val['TASKNAME']); ?> </span></a>
+
+                                    <span class=" checkbox__text"><?=filterText($val['TASKNAME']); ?> </span>
+
                             </label>
                         </td>
 

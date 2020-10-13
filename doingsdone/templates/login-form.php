@@ -20,7 +20,7 @@
       </a>
 
       <div class="main-header__side">
-        <a class="main-header__side-item button button--transparent" href="form-authorization.html">Войти</a>
+        <a class="main-header__side-item button button--transparent" href="login.php">Войти</a>
       </div>
     </header>
 
@@ -29,7 +29,7 @@
       <section class="content__side">
         <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
 
-        <a class="button button--transparent content__side-button" href="form-authorization.html">Войти</a>
+        <a class="button button--transparent content__side-button" href="login.php">Войти</a>
       </section>
 
       <main class="content__main">
@@ -39,15 +39,15 @@
             <div class="form__row">
               <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
-              <input class="form__input" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
+              <input class="form__input" type="text" name="email" id="email" value="<?php if(isset($_POST['email'])){print($_POST['email']); } ?>" placeholder="Введите e-mail">
             </div>
 
             <div class="form__row">
               <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
-              <input class="form__input " type="password" name="password" id="password" value="" placeholder="Введите пароль">
-                
-            </div>           
+              <input class="form__input " type="password" name="password" id="password" value="<?php if(isset($_POST['password'])){print($_POST['password']); } ?>" placeholder="Введите пароль">
+
+            </div>
 
             <div class="form__row form__row--controls">
               <?php if(count($errors)>0){print('<p class="error-message">Введена неверная почта или пароль</p>');} ?>

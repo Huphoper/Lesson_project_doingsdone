@@ -20,9 +20,11 @@ function createprojectlist($con,$userid){
     return $projects;
 }
 function createtasklist($con,$userid,$project,$task_search,$filter){
+
     if($filter==all){
-        
+
     if($task_search!=null){
+        $task_search=trim($task_search);
         $sql = 'SELECT `TASKNAME`,`ENDTIME`,`PROJECT_ID`,`TASK_STATUS`,`FILEREF` FROM `task` WHERE `USER_ID`=? AND MATCH(`TASKNAME`) AGAINST(?) ORDER BY `TASK_ID` DESC';
         $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt,'is',$userid,$task_search);
@@ -107,31 +109,31 @@ function login_validate($con,$reg_date){
     $errors = [];
     if(filter_var($reg_date['email'],FILTER_VALIDATE_EMAIL)){
         $sql = 'SELECT COUNT(`EMAIL`) FROM `user` WHERE `EMAIL`= ?';
-            
+
         $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt,'s',$reg_date['email']);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $exists=mysqli_fetch_assoc($result);
-        
+
         if($exists['COUNT(`EMAIL`)']==1){
-           
-           $errors['email']='202'; 
+
+           $errors['email']='202';
         }
     }
     else{
-        
+
         $errors['email']='201';
     }
     if(strlen($reg_date['name'])<1 || strlen($reg_date['name'])>30 ){
-        
+
         $errors['name']='203';
     }
     if(strlen($reg_date['password'])<5){
-        
+
         $errors['password']='204';
     }
-    
+
     return $errors;
       }
 function add_user($con,$reg_date){
@@ -143,11 +145,11 @@ function add_user($con,$reg_date){
   //   print('Запись добавлена!');
    // var_dump($res);
     if ($res) {
-                   
+
  header("Location: login.php");
  }
 }
-function addproject($con,$taskname,$userid){   
+function addproject($con,$taskname,$userid){
     $sql = 'INSERT INTO `project` (`PROJECT_NAME`,`USER_ID`) VALUES (?,?)';
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt,'si',$taskname['name'],$userid);
@@ -156,29 +158,24 @@ function addproject($con,$taskname,$userid){
  header("Location: index.php?project=".$taskname['name']);
  }
     else{
-       $errors['name']='102'; 
+       $errors['name']='102';
         return $errors;
     }
 }
-function statuschange($con,$taskname,$userid){
-    $sql='SELECT `TASK_STATUS` FROM `task` WHERE `USER_ID`=? AND `TASKNAME`=?';
-    $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt,'is',$userid,$taskname);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
-    $taskstatus=mysqli_fetch_assoc($res);
-    $status =$taskstatus['TASK_STATUS'];
-    if($status==1){
-       $sql = "UPDATE `task` SET `TASK_STATUS` = '0' WHERE `TASKNAME` = ? AND `USER_ID`=?"; 
+function statuschange($con,$taskname,$check,$userid){
+    if($check==1){
+       $sql = "UPDATE `task` SET `TASK_STATUS` = '1' WHERE `TASKNAME` = ? AND `USER_ID`=?";
     }
     else{
-       $sql = "UPDATE `task` SET `TASK_STATUS` = '1' WHERE `TASKNAME` = ? AND `USER_ID`=?"; 
-    } 
-    
+       $sql = "UPDATE `task` SET `TASK_STATUS` = '0' WHERE `TASKNAME` = ? AND `USER_ID`=?";
+    }
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt,'si',$taskname,$userid);
     $res=mysqli_stmt_execute($stmt);
+    if($res){
     header("Location: index.php");
+    }
+
 }
 function logintry($con,$user_data){
      $sql = 'SELECT `PASSWORD` FROM `user` WHERE `EMAIL`= ?';
@@ -186,7 +183,7 @@ function logintry($con,$user_data){
      mysqli_stmt_bind_param($stmt,'s',$user_data['email']);
      mysqli_stmt_execute($stmt);
      $result = mysqli_stmt_get_result($stmt);
-     $hashpass=mysqli_fetch_assoc($result);     
+     $hashpass=mysqli_fetch_assoc($result);
      if(password_verify($user_data['password'],$hashpass['PASSWORD'])){
      $sql = 'SELECT `USER_ID` FROM `user` WHERE `EMAIL`= ?';
      $stmt = mysqli_prepare($con, $sql);
@@ -194,8 +191,8 @@ function logintry($con,$user_data){
      mysqli_stmt_execute($stmt);
      $result = mysqli_stmt_get_result($stmt);
      $usid=mysqli_fetch_assoc($result);
-     
-     $_SESSION['usid'] = $usid['USER_ID'];     
+
+     $_SESSION['usid'] = $usid['USER_ID'];
      header("Location: index.php");
      }
     else{
